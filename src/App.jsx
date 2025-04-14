@@ -10,56 +10,60 @@ import Unauthorized from './pages/Unauthorized';
 import Layout from './components/Layout';
 import { DashboardProvider } from './context/DashboardContext';
 import { ProductProvider } from './context/ProductContext';
-import Products from './pages/products';
+import Products from './pages/Products';
+import ProductDetail from './pages/productDetails';
 
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
+        <ProductProvider>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
 
 
-            <Route element={<AuthRoute />}>
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-              
-            </Route>
-            <Route path="products" element={
-                <ProductProvider>
-                  <Products />
-                </ProductProvider>
+              <Route element={<AuthRoute />}>
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+
+              </Route>
+              <Route path="Products" element={
+                // <ProductProvider>
+                <Products />
+                // </ProductProvider>
               } />
-            <Route path="unauthorized" element={<Unauthorized />} />
+              <Route path="products/:id" element={<ProductDetail />} />
+              <Route path="unauthorized" element={<Unauthorized />} />
 
-            {/* Protected routes */}
-            <Route
-              element={
-                <ProtectedRoute roles={["product_manager", "super_admin"]} />
-              }
-            >
+              {/* Protected routes */}
               <Route
-                path="dashboard"
                 element={
-                  <DashboardProvider>
-                    <Dashboard />
-                  </DashboardProvider>
+                  <ProtectedRoute roles={["product_manager", "super_admin"]} />
                 }
-              />
-            </Route>
+              >
+                <Route
+                  path="dashboard"
+                  element={
+                    <DashboardProvider>
+                      <Dashboard />
+                    </DashboardProvider>
+                  }
+                />
+              </Route>
 
-            <Route element={<ProtectedRoute roles={['super_admin']} />}>
-              <Route path="categories" element={<div>Categories Management</div>} />
-            </Route>
+              <Route element={<ProtectedRoute roles={['super_admin']} />}>
+                <Route path="categories" element={<div>Categories Management</div>} />
+              </Route>
 
-            {/* <Route element={<ProtectedRoute roles={['product_manager', 'super_admin']} />}>
+              {/* <Route element={<ProtectedRoute roles={['product_manager', 'super_admin']} />}>
               <Route path="products" element={<div>Products Management</div>} />
             </Route> */}
-          </Route>
-          <Route path="*" element={<div>404</div>} />
-        </Routes>
+            </Route>
+            <Route path="*" element={<div>404</div>} />
+          </Routes>
+        </ProductProvider>
       </AuthProvider>
     </Router>
   );
