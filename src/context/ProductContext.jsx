@@ -6,7 +6,7 @@ const ProductContext = createContext();
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [productDetails, setProductDetails] =  useState();
+  const [productDetails, setProductDetails] = useState();
 
   const fetchProducts = async () => {
     try {
@@ -16,7 +16,7 @@ export const ProductProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('error fetch products', error);
- 
+
       return {
         success: false,
         message: error.response?.data?.message || 'error fetch products'
@@ -30,14 +30,14 @@ export const ProductProvider = ({ children }) => {
     try {
       const response = await api.get(`v1/admin/products/${id}`);
       setProductDetails(response.data.product);
-      console.log('products show ', response.data.product);
-      return { 
+      // console.log('products show ', response.data.product);
+      return {
         success: true,
-        product : response.data.product
+        product: response.data.product
       };
     } catch (error) {
       console.error('error show product details', error);
- 
+
       return {
         success: false,
         message: error.response?.data?.message || 'error show product'
@@ -46,8 +46,37 @@ export const ProductProvider = ({ children }) => {
       setLoading(false);
     }
   }
+
+  const createProduct = async (productData) => {
+    try {
+      const response = await api.post('v1/admin/products', productData);
+
+      return {
+        success: true,
+        product: response.data.product,
+        message: 'Produit créé avec succès !'
+      };
+    } catch (error) {
+      console.error('Erreur lors de la création du produit', error);
+
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Erreur lors de la création du produit'
+      };
+    }
+  };
+
+
+  const updateProduct = async (id) => {
+    try {
+      const response = await api.post(`v1/admin/products/${id}`)
+
+    } catch (error) {
+
+    }
+  }
   return (
-    <ProductContext.Provider value={{ products, loading , fetchProducts, showProduct , productDetails}}>
+    <ProductContext.Provider value={{ products, loading, fetchProducts, showProduct, productDetails, createProduct}}>
       {children}
     </ProductContext.Provider>
   );

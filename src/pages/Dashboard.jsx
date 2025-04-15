@@ -1,16 +1,15 @@
 import { useDashboard } from '../context/DashboardContext';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Box, Typography, Container, Card, CardContent, Grid, CircularProgress } from '@mui/material';
-import { Dashboard as DashboardIcon, ShoppingCart, People, BarChart } from '@mui/icons-material';
+import Sidebar from '../components/sidebar';
 
 const Dashboard = () => {
-
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { data } = useDashboard();
 
   console.log(data);
+
   useEffect(() => {
     // Simulate loading data
     const timer = setTimeout(() => {
@@ -22,89 +21,65 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
-        <CircularProgress />
-      </Box>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin border-t-4 border-blue-500 border-solid w-12 h-12 rounded-full"></div>
+      </div>
     );
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Dashboard
-      </Typography>
-      <Typography variant="subtitle1" gutterBottom>
-        Welcome back, {user.name} {user.roles[0].name}
-      </Typography>
+    <div className="flex">
+      <Sidebar />
 
-      <Grid container spacing={3} sx={{ mt: 2 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between">
-                <Typography color="textSecondary" gutterBottom>
-                  Total Products
-                </Typography>
-                <ShoppingCart color="primary" />
-              </Box>
-              <Typography variant="h5">{ data.total_products }</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between">
-                <Typography color="textSecondary" gutterBottom>
-                  Total Users
-                </Typography>
-                <People color="primary" />
-              </Box>
-              <Typography variant="h5">{ data.total_users }</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between">
-                <Typography color="textSecondary" gutterBottom>
-                  Total Orders
-                </Typography>
-                <BarChart color="primary" />
-              </Box>
-              <Typography variant="h5">0</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between">
-                <Typography color="textSecondary" gutterBottom>
-                  Revenue
-                </Typography>
-                <DashboardIcon color="primary" />
-              </Box>
-              <Typography variant="h5">$0</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      <div className="container mx-auto mt-4 mb-4">
+        <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+        <p className="text-lg text-gray-600 mb-4">
+          Welcome back, {user.name} ({user.roles[0].name})
+        </p>
 
-      <Box sx={{ mt: 4 }}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Recent Activity
-            </Typography>
-            <Typography color="textSecondary">
-              No recent activity
-            </Typography>
-          </CardContent>
-        </Card>
-      </Box>
-    </Container>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+          <div className="bg-white p-4 shadow-md rounded-lg">
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-gray-500">Total Products</p>
+              <div className="text-blue-500">🛒</div>
+            </div>
+            <p className="text-xl font-semibold">{data.total_products}</p>
+          </div>
+
+          <div className="bg-white p-4 shadow-md rounded-lg">
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-gray-500">Total Users</p>
+              <div className="text-blue-500">👥</div>
+            </div>
+            <p className="text-xl font-semibold">{data.total_users}</p>
+          </div>
+
+          <div className="bg-white p-4 shadow-md rounded-lg">
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-gray-500">Total Orders</p>
+              <div className="text-blue-500">📊</div>
+            </div>
+            <p className="text-xl font-semibold">0</p>
+          </div>
+
+          <div className="bg-white p-4 shadow-md rounded-lg">
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-gray-500">Revenue</p>
+              <div className="text-blue-500">📈</div>
+            </div>
+            <p className="text-xl font-semibold">$0</p>
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <div className="bg-white p-4 shadow-md rounded-lg">
+            <h2 className="text-xl font-semibold mb-2">Recent Activity</h2>
+            <p className="text-sm text-gray-500">No recent activity</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   );
 };
 
